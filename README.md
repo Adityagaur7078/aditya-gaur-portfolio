@@ -60,4 +60,3 @@ Upload the folder to any static host, such as Vercel, Netlify or GitHub Pages. O
 ## Notes
 
 - Project links open the live site in a new tab. The live sites are not embedded.
-- Reduced motion: the "Reduce motion" button in the header turns the animations off and remembers the choice in the browser.
