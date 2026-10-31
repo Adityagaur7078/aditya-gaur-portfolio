@@ -91,7 +91,9 @@
                         target="_blank" rel="noopener noreferrer" aria-label="Open the GATI live demo in a new tab">
                         <div class="frame">
                             <div class="bar"><i></i><i></i><i></i><span class="m">gati-tawny-tau.vercel.app</span></div>
-                            <div class="demo-stage" aria-hidden="true"></div>
+                            <div class="demo-box">
+                                <iframe data-src="https://gati-tawny-tau.vercel.app/" title="GATI live demo preview"></iframe>
+                            </div>
                         </div>
                     </a>
                     <div class="info">
@@ -116,7 +118,10 @@
                         target="_blank" rel="noopener noreferrer" aria-label="Open the BiteLoop live demo in a new tab">
                         <div class="frame">
                             <div class="bar"><i></i><i></i><i></i><span class="m">bite-loop.vercel.app</span></div>
-                            <div class="demo-stage" aria-hidden="true"></div>
+                            <div class="demo-box biteloop-demo">
+                                <iframe data-src="https://bite-loop.vercel.app/" title="BiteLoop live demo preview"
+                                    scrolling="no"></iframe>
+                            </div>
                         </div>
                     </a>
                     <div class="info">
@@ -269,7 +274,6 @@
             <div class="wrap">
                 <p class="m" data-rv>Resume</p>
                 <h2 class="big" id="t-resume">The formal version.</h2>
-                <p class="rtx" data-rv>My full resume, with every link clickable.</p>
                 <nav class="rlinks" data-rv aria-label="Links from my resume">
                     <a href="mailto:adityagaur7078@gmail.com">Email</a>
                     <a href="https://github.com/Adityagaur7078" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -287,10 +291,12 @@
                     <a href="https://github.com/Adityagaur7078/BiteLoop" target="_blank"
                         rel="noopener noreferrer">BiteLoop repository</a>
                 </nav>
-                <figure class="rpdf" data-rv><iframe id="resume-pdf" title="Aditya Gaur resume (PDF)"
-                        loading="lazy"></iframe></figure>
-                <div class="pl" data-rv><button class="btn p dlb" type="button">Download PDF</button><button id="rview"
-                        class="btn" type="button">Open full screen</button></div>
+                <div class="frame rframe" data-rv>
+                    <div class="bar"><i></i><i></i><i></i><span class="m">Aditya-Gaur-Resume.pdf</span></div>
+                    <iframe id="resume-pdf" class="rpdf-in" title="Aditya Gaur resume (PDF)"
+                        loading="lazy"></iframe>
+                </div>
+                <div class="pl" data-rv><button class="btn p dlb" type="button">Download PDF</button></div>
                 <p class="m note dlm" role="status"></p>
             </div>
         </section>
@@ -314,13 +320,6 @@
     </main>
 
 
-    <dialog id="rdlg" aria-label="Resume preview">
-        <div class="dh"><span class="m">Resume &middot; Aditya Gaur</span>
-            <div class="pl"><button class="btn p dlb" type="button">Download PDF</button><button class="btn" id="rclose"
-                    type="button">Close</button></div>
-        </div><iframe id="rdlg-pdf" class="dpdf" title="Aditya Gaur resume (PDF)"></iframe>
-        <p class="m note dlm" role="status" style="padding:10px 14px"></p>
-    </dialog>
     <footer>
         <div class="wm" aria-hidden="true"><span class="l" data-split>Aditya Gaur</span></div>
         <div class="fr2 m"><span>Kotdwar local time <time id="tm">--:--</time></span><span>&copy; 2026 Aditya
@@ -332,6 +331,28 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="js/portrait-data.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        (function () {
+            var fr = document.querySelectorAll('iframe[data-src]');
+            if (!('IntersectionObserver' in window)) {
+                Array.prototype.forEach.call(fr, function (f) {
+                    f.src = f.getAttribute('data-src');
+                });
+                return;
+            }
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.src = entry.target.getAttribute('data-src');
+                        io.unobserve(entry.target);
+                    }
+                });
+            }, { rootMargin: '300px 0px' });
+            Array.prototype.forEach.call(fr, function (f) {
+                io.observe(f);
+            });
+        })();
+    </script>
 </body>
 
 </html>

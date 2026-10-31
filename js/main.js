@@ -313,15 +313,12 @@
   addEventListener('hashchange', function () { var v = wantView(), h = location.hash.slice(1); if (v) { if (v !== view) go(v) } else if (view !== 'home') go('home', h) });
 
   /* ================= RESUME: view + download ================= */
-  var RESUME_URL = "assets/resume/Aditya-Gaur-Resume.pdf", rd = $('#rdlg');
+  var RESUME_URL = "assets/resume/Aditya-Gaur-Resume.pdf";
   function resumeHref() {
     if (typeof RB !== 'undefined' && RB) { var bin = atob(RB), u = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++)u[i] = bin.charCodeAt(i); return URL.createObjectURL(new Blob([u], { type: 'application/pdf' })) }
     return RESUME_URL;
   }
   $('#resume-pdf').src = resumeHref() + '#toolbar=1&navpanes=0';
-  $('#rview').addEventListener('click', function () { $('#rdlg-pdf').src = resumeHref() + '#toolbar=1'; if (rd.showModal) rd.showModal(); else rd.setAttribute('open', '') });
-  $('#rclose').addEventListener('click', function () { rd.close() });
-  rd.addEventListener('click', function (e) { if (e.target === rd) rd.close() });
   $$('.dlb').forEach(function (bt) {
     bt.addEventListener('click', function () {
       var msg = bt.closest('section,dialog').querySelector('.dlm'); msg.textContent = '';
@@ -329,6 +326,19 @@
       catch (e) { msg.textContent = 'Download is unavailable here. Email me and I will send it.' }
     })
   });
+
+  /* FRESH START: a page refresh always opens at the top */
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  (function () {
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    function resetScroll() {
+      window.scrollTo(0, 0);
+      requestAnimationFrame(function () { window.scrollTo(0, 0) });
+    }
+    resetScroll();
+    addEventListener('load', resetScroll);
+    addEventListener('pageshow', resetScroll);
+  })();
 
   /* ================= START ================= */
   (function () {

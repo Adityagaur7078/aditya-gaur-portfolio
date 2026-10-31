@@ -423,7 +423,7 @@ html.rm .mf {
     justify-content: space-between;
     align-items: center;
     font: 700 var(--fs)/.8 var(--d);
-    letter-spacing: -.06em;
+    letter-spacing: -.03em;
     text-transform: uppercase;
     z-index: 3;
     color: #fff;
@@ -439,7 +439,8 @@ html.rm .mf {
 }
 
 .hn .c {
-    display: inline-block
+    display: inline-block;
+    margin-right: .01em
 }
 
 #dots {
@@ -1930,45 +1931,6 @@ footer {
     letter-spacing: -.03em
 }
 
-/* resume dialog */
-#rdlg {
-    border: 1px solid var(--bd);
-    background: #07070a;
-    color: var(--tx);
-    padding: 0;
-    width: min(920px, 94vw);
-    max-height: 92svh;
-    border-radius: 14px;
-    overflow: auto
-}
-
-#rdlg::backdrop {
-    background: rgba(0, 0, 0, .8);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px)
-}
-
-#rdlg .dh {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    padding: 12px 14px;
-    background: #07070a;
-    border-bottom: 1px solid var(--bd)
-}
-
-#rdlg img {
-    display: block;
-    width: 100%;
-    height: auto;
-    background: #fff
-}
-
 @media(max-width:900px) {
     .wk {
         grid-template-columns: 1fr
@@ -2073,6 +2035,40 @@ section.s {
     outline-offset: -4px
 }
 
+.demo-box {
+    position: relative;
+    aspect-ratio: 16/10;
+    max-height: 460px;
+    overflow: hidden;
+    background: #050507
+}
+
+.demo-box iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: #050507;
+    pointer-events: none
+}
+
+.biteloop-demo {
+    aspect-ratio: 4/3
+}
+
+.biteloop-demo iframe {
+    width: 125%;
+    height: 125%;
+    transform: scale(.8);
+    transform-origin: top left
+}
+
+.fv:hover .frame,
+.fv:focus-within .frame {
+    transform: none
+}
+
 .wk .fv {
     max-width: 640px;
     width: 100%
@@ -2119,24 +2115,15 @@ section.s {
     border-color: var(--tx)
 }
 
-.rpdf {
-    margin: 0 0 22px;
-    border: 1px solid var(--bd);
-    background: #0b0b10;
-    height: clamp(520px, 74svh, 860px)
+.rframe {
+    max-width: 900px;
+    margin: 0 0 22px
 }
 
-.rpdf iframe {
+.rpdf-in {
     display: block;
     width: 100%;
-    height: 100%;
-    border: 0
-}
-
-.dpdf {
-    display: block;
-    width: 100%;
-    height: 82svh;
+    height: clamp(460px, 70svh, 760px);
     border: 0;
     background: #0b0b10
 }
