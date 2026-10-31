@@ -19,7 +19,7 @@
   function bgDraw(t) {
     if (!bgOk) return; var x = bx, i, s = sT;
     x.setTransform(bdpr, 0, 0, bdpr, 0, 0); x.fillStyle = '#030304'; x.fillRect(0, 0, BW, BH);
-    glow(BW * (.18 + .64 * s), BH * .12, BW * .6, 'rgba(255,255,255,0.064)'); glow(BW * (.92 - .55 * s), BH * .98, BW * .55, 'rgba(255,255,255,0.048)');
+    glow(BW * (.18 + .64 * s) + Math.sin(t * .0003) * BW * .05, BH * .12 + Math.cos(t * .00025) * BH * .04, BW * .6, 'rgba(255,255,255,0.064)'); glow(BW * (.92 - .55 * s) + Math.cos(t * .00028) * BW * .05, BH * .98 + Math.sin(t * .00022) * BH * .03, BW * .55, 'rgba(255,255,255,0.048)');
     if (!reduce) { mp.sx += (mp.x - mp.sx) * .2; mp.sy += (mp.y - mp.sy) * .2 }
     var on = !reduce && mp.x > -900, R = Math.min(230, BW * .3), R2 = R * R;
     if (on) { glow(mp.sx, mp.sy, R * 1.5, 'rgba(255,255,255,0.052)') }
@@ -45,6 +45,11 @@
   }
   function startBg() { if (bgOk && !reduce && !bgRaf) bgRaf = requestAnimationFrame(bgLoop) }
   function stopBg() { if (bgRaf) { cancelAnimationFrame(bgRaf); bgRaf = 0 } }
+  document.addEventListener('pointerdown', function (e) {
+    if (reduce || !bgOk) return;
+    mp.x = e.clientX; mp.y = e.clientY; mp.sx = mp.x; mp.sy = mp.y; mp.seen = 1; emit(6, 0, -1);
+  });
+  ['pointerup', 'pointercancel'].forEach(function (ev) { document.addEventListener(ev, function () { mp.x = mp.y = -999 }) });
   document.addEventListener('pointermove', function (e) {
     if (reduce || !bgOk || e.pointerType === 'touch') return;
     var vx = e.clientX - mp.x, vy = e.clientY - mp.y; if (!mp.seen) { mp.sx = e.clientX; mp.sy = e.clientY; mp.seen = 1; vx = vy = 0 }
@@ -179,7 +184,7 @@
     gsap.registerPlugin(ScrollTrigger);
     var S = $('.scene'), V = views.home;
     ctx = gsap.context(function () {
-      var mob = innerWidth <= 700; if (!mob) S.classList.add('pin'); layout();
+      var mob = innerWidth <= 700; S.classList.add('pin'); layout();
       var tl = gsap.timeline({ defaults: { ease: 'power4.out' }, paused: first });
       if (first) { ld.style.display = 'block'; tl.to('#ld .lt', { opacity: 0, duration: .3 }).to('#ld .lh.t', { yPercent: -100, duration: 1.15, ease: 'power4.inOut' }, '<').to('#ld .lh.b', { yPercent: 100, duration: 1.15, ease: 'power4.inOut', onComplete: hideLd }, '<') }
       tl.from('.hn .c', { yPercent: 115, duration: 1.1, stagger: .06 }, first ? '-=.5' : 0)
@@ -187,10 +192,8 @@
         .from('.tl span,.cta .btn,.sc > *', { opacity: 0, y: 20, stagger: .1, duration: .7 }, '-=1.8');
       if (!first) tl.progress(1);
       if (first) { first = false; runLoader(function () { tl.play() }) }
-      if (!mob) {
-        ScrollTrigger.create({ trigger: S, start: 'top top', end: '+=170%', pin: true, invalidateOnRefresh: true, onUpdate: heroScroll, onRefresh: heroScroll });
-        heroScroll();
-      }
+      ScrollTrigger.create({ trigger: S, start: 'top top', end: mob ? '+=120%' : '+=170%', pin: true, invalidateOnRefresh: true, onUpdate: heroScroll, onRefresh: heroScroll });
+      heroScroll();
       $$('.big', V).forEach(function (hd) { gsap.from($$('.w>span', hd), { yPercent: 115, duration: 1, stagger: .08, ease: 'power4.out', scrollTrigger: { trigger: hd, start: 'top 88%' } }) });
       $$('section.s', V).forEach(function (s) { gsap.fromTo(s, { '--ln': 0 }, { '--ln': 1, ease: 'none', scrollTrigger: { trigger: s, start: 'top 92%', end: 'top 50%', scrub: true } }) });
       reveal(V);
